@@ -1,0 +1,81 @@
+body {
+  font-family: "Verdana", sans-serif;
+  background-image: url("images/pokemon-field.png");
+  background-size: cover;
+  background-attachment: fixed;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 30px;
+  margin: auto;
+  border-radius: 15px;
+  box-shadow: 0 0 20px #000;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.pokemon-card {
+  border: 2px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  background: #222;
+  color: #fff;
+  transition: transform 0.3s;
+}
+.pokemon-card:hover {
+  transform: scale(1.05);
+}
+
+img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #ffcc00;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #ffaa00;
+}
+
+.arena {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.controls button {
+  margin: 10px;
+  padding: 10px 15px;
+  background-color: #ff5555;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background-color: #ff3333;
+}

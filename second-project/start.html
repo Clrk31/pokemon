@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Start Game</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Pokémon Tournament</h1>
+      <input type="text" id="playerName" placeholder="Enter your name" />
+      <button onclick="startGame()">Start</button>
+    </div>
+
+    <script>
+      function startGame() {
+        const name = document.getElementById("playerName").value;
+        if (name.trim()) {
+          localStorage.setItem("playerName", name);
+          window.location.href = "select.html";
+        } else {
+          alert("Please enter your name.");
+        }
+      }
+    </script>
+  </body>
+</html>

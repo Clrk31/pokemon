@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Select Pokémon</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="greeting">Choose 3 Pokémon</h1>
+      <div id="pokemonList" class="grid"></div>
+      <button id="startBtn" onclick="startTournament()" disabled>
+        Start Tournament
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      const name = localStorage.getItem("playerName") || "Player";
+      document.getElementById(
+        "greeting"
+      ).textContent = `Hello, ${name}! Choose 3 Pokémon`;
+
+      renderPokemonSelection();
+    </script>
+  </body>
+</html>
