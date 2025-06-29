@@ -8,17 +8,18 @@
 <body>
   <div class="container">
     <h1>🏆 Pokémon Tournament</h1>
-    <div id="tournamentStatus"></div>
+    <div id="tournamentStatus" class="status-area"></div>
     <div id="battleArena" class="arena"></div>
     <div id="battleControls" class="controls"></div>
     <div id="tournamentResults"></div>
-    <button onclick="window.location.reload()">Restart</button>
+    <button onclick="window.location.href='start.html'">Restart</button>
     <button onclick="window.location.href='start.html'">Quit</button>
   </div>
 
   <script src="script.js"></script>
   <script>
-    startFullTournament();
-  </script>
+  startRoundRobinTournament();
+</script>
+
 </body>
 </html>

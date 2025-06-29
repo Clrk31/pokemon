@@ -201,6 +201,7 @@ const pokemons = [
     ],
   },
 ];
+
 // --- SELECT.HTML Functions ---
 let selectedPokemons = [];
 
@@ -237,13 +238,13 @@ function startTournament() {
   window.location.href = "index.html";
 }
 
-// --- INDEX.HTML Tournament Logic ---
+// --- INDEX.HTML Round Robin Tournament Logic ---
 
 function getRandomTeam() {
   return [...pokemons].sort(() => 0.5 - Math.random()).slice(0, 3);
 }
 
-function startFullTournament() {
+function startRoundRobinTournament() {
   const playerTeam = JSON.parse(localStorage.getItem("selectedPokemons"));
   const playerName = localStorage.getItem("playerName") || "You";
 
@@ -256,58 +257,50 @@ function startFullTournament() {
     })),
   ];
 
-  let round = 1;
-  let matchQueue = [];
+  const matches = [];
+  const scores = {};
 
-  // Initial pairings
-  for (let i = 0; i < players.length; i += 2) {
-    matchQueue.push([players[i], players[i + 1]]);
+  players.forEach((p) => (scores[p.name] = 0));
+
+  for (let i = 0; i < players.length; i++) {
+    for (let j = i + 1; j < players.length; j++) {
+      matches.push([players[i], players[j]]);
+    }
   }
 
-  const winners = [];
+  let currentMatch = 0;
 
-  function nextMatch() {
-    if (matchQueue.length === 0) {
-      if (winners.length === 1) {
-        document.getElementById(
-          "tournamentResults"
-        ).innerHTML = `<h2>🏆 Champion: ${winners[0].name}</h2>`;
-        return;
-      }
-
-      // Setup next round
-      round++;
-      const nextRoundMatches = [];
-      for (let i = 0; i < winners.length; i += 2) {
-        nextRoundMatches.push([winners[i], winners[i + 1]]);
-      }
-      matchQueue = nextRoundMatches;
-      winners.length = 0;
-      return nextMatch();
+  function playNextMatch() {
+    if (currentMatch >= matches.length) {
+      const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+      const maxScore = sorted[0][1];
+      const winners = sorted.filter(([_, score]) => score === maxScore).map(([name]) => name);
+      document.getElementById("tournamentResults").innerHTML = `
+        <h2>🏆 Winners: ${winners.join(", ")}</h2>
+      `;
+      return;
     }
 
-    const [playerA, playerB] = matchQueue.shift();
-    const isUser = playerA.name === playerName || playerB.name === playerName;
+    const [playerA, playerB] = matches[currentMatch];
+    const isUserMatch = playerA.name === playerName || playerB.name === playerName;
 
-    if (isUser) {
+    if (isUserMatch) {
       play3vs3FullKO(playerA, playerB, (winner) => {
-        winners.push(winner);
-        document.getElementById(
-          "tournamentStatus"
-        ).innerHTML += `<p>${playerA.name} vs ${playerB.name} → Winner: ${winner.name}</p>`;
-        setTimeout(nextMatch, 1000);
+        scores[winner.name]++;
+        document.getElementById("tournamentStatus").innerHTML += `<p>${playerA.name} vs ${playerB.name} → Winner: ${winner.name}</p>`;
+        currentMatch++;
+        setTimeout(playNextMatch, 1000);
       });
     } else {
       const winner = simulate3v3BattleFullKO(playerA, playerB);
-      winners.push(winner);
-      document.getElementById(
-        "tournamentStatus"
-      ).innerHTML += `<p>${playerA.name} vs ${playerB.name} → Winner: ${winner.name}</p>`;
-      setTimeout(nextMatch, 1000);
+      scores[winner.name]++;
+      document.getElementById("tournamentStatus").innerHTML += `<p>${playerA.name} vs ${playerB.name} → Winner: ${winner.name}</p>`;
+      currentMatch++;
+      setTimeout(playNextMatch, 1000);
     }
   }
 
-  nextMatch();
+  playNextMatch();
 }
 
 function simulate3v3BattleFullKO(playerA, playerB) {
